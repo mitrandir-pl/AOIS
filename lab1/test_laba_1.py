@@ -1,7 +1,5 @@
 import unittest
 from laba_1 import to_straight, addition, multiplication, division
-# Во второй строчке поменяй "laba_1" на название файла в котором у тебя первая лаба
-# И этот тестовый файл должен быть в папке с первой лабой
 
 
 class TestLaba(unittest.TestCase):
@@ -11,7 +9,7 @@ class TestLaba(unittest.TestCase):
         self.assertEqual(to_straight(25), '0000000000011001')
         self.assertEqual(to_straight(-8), '1000000000001000')
 
-    
+
     def test_addition(self):
         self.assertEqual(addition(to_straight(14), to_straight(25)), '0000000000100111')
         self.assertEqual(addition(to_straight(8), to_straight(8)), '0000000000010000')

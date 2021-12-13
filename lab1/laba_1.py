@@ -71,7 +71,7 @@ def addition(summand1, summand2, keyword=None):
     summand1 = summand1[::-1]
     summand2 = summand2[::-1]
     remnant = 0
-    for i in range(len(summand2)):
+    for i in range(min(len(summand2), len(summand1))):
         sum_in_place = int(summand1[i]) + int(summand2[i]) + remnant
         if sum_in_place == 0:
             sum_value = '0' + sum_value
@@ -107,8 +107,7 @@ def multiplication(multiplier1, multiplier2):
 
 def division(dividend, divisor):
     quotient = ZERO
-    if dividend[0] != divisor[0]:
-        quotient = '-' + quotient
+    flag = dividend[0] != divisor[0]
     difference = dividend = '0' + dividend[1:]
     divisor = '1' + divisor[1:]
     check = addition(dividend, from_straight_to_additional(divisor))
@@ -118,7 +117,10 @@ def division(dividend, divisor):
             if difference[0] != '1':
                 quotient = addition(quotient, ONE)
             if difference == ZERO:
-                return quotient + ',00000'
+                if flag:
+                    return f"-{quotient},00000"
+                else:
+                    return f"{quotient},00000"
         difference = addition(difference, '0' + divisor[1:])
     return f'{quotient},{difference[11:]}'
             
@@ -128,6 +130,11 @@ def float_addition(summand1, summand2):
     mantissa2, index2 = summand2.split(',')
     mantissa1 = '00' + mantissa1[mantissa1.find('1'):]
     mantissa2 = '00' + mantissa2[mantissa2.find('1'):]
+    while len(mantissa1) != len(mantissa2):
+        if len(mantissa1) < len(mantissa2):
+            mantissa1 = "0" + mantissa1
+        else:
+            mantissa2 = "0" + mantissa2
     while index1 != index2:
         index1 = addition(index1, ONE)
         mantissa1 = '0' + mantissa1

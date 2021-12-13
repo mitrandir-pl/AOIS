@@ -36,3 +36,7 @@ class TestLaba(unittest.TestCase):
         self.assertEqual(self.E.sknf, "(a+!b+c) * (a+!b+!c) * (!a+b+c) * (!a+!b+c) * (!a+!b+!c)")
         self.assertEqual(self.E.bin_num_sdnf, "000+001+101")
         self.assertEqual(self.E.bin_num_sknf, "101*100*011*001*000")
+
+
+if __name__ == "__main__":
+    unittest.main()

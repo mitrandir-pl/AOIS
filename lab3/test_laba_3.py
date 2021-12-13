@@ -43,5 +43,6 @@ class TestLaba(unittest.TestCase):
             [["a", "b", "c"], ["a", "b", "!c"], ["a", "!b", "c"], ["!a", "!b", "c"]]),
             [["!b", "c"], ["a", "b"]])
 
+
 if __name__ == "__main__":
     unittest.main()

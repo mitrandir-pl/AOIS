@@ -20,7 +20,7 @@ def gluing(SNF, amount):
     return nf
 
 
-def calculation_tabular_method(nf, SNF, key=None):
+def calculation_tabular_method(nf, SNF):
     mnf, table, filled_columns, verifiable_implicants = [], [], [], []
     for i in nf:
         table.append([len(set(i) & set(j)) == len(set(i)) for j in SNF])
@@ -51,19 +51,6 @@ def calculation_tabular_method(nf, SNF, key=None):
                 )) and len(set_of_verifiable_implicants) < min_amount:
                     min_amount = len(set_of_verifiable_implicants)
         mnf.extend(subset)
-    # print("            ", end="")
-    # for i in SNF:
-    #     sign = "*" if key == "sdnf" else "+"
-    #     print(f"|   {sign.join(i).ljust(10, ' ')}", end="")
-    # print()
-    # for index, i in enumerate(table):
-    #     print(f" {sign.join(nf[index]).ljust(10, ' ')} ", end="")
-    #     for j in i:
-    #         if j:
-    #             print("|      x      ", end="")
-    #         else:
-    #             print("|             ", end="")
-    #     print()
     return mnf
 
 
@@ -144,35 +131,36 @@ def print_table(table):
     for i in table:
         print(f"|   {i[4]}   ", end="")
     print("\n---------------------------------------------------------------------------\n")
+    print("3 1-in !\n1 4-in +\n1 3-in +\n4 3-in *\n3 2-in *\n\n")
 
 
 def print_new_table(table):
-    print("\n     #     | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 ")
-    print("-----------------------------------------------------------------------------\n", "   x1   ".ljust(10, " "), end="")
+    print("\n     #     | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  | 9  | 10 | 11 | 12 | 13 | 14 | 15 | 16 ")
+    print("-------------------------------------------------------------------------------------------\n", "   x1   ".ljust(10, " "), end="")
     for i in table:
-        print(f"| {i[0]} ", end="")
-    print("\n---------------------------------------------------------------------------\n", "   x2   ".ljust(10, " "), end="")
+        print(f"| {i[0]}  ", end="")
+    print("\n-------------------------------------------------------------------------------------------\n", "   x2   ".ljust(10, " "), end="")
     for i in table:
-        print(f"| {i[1]} ", end="")
-    print("\n---------------------------------------------------------------------------\n", "   x3   ".ljust(10, " "), end="")
+        print(f"| {i[1]}  ", end="")
+    print("\n-------------------------------------------------------------------------------------------\n", "   x3   ".ljust(10, " "), end="")
     for i in table:
-        print(f"| {i[2]} ", end="")
-    print("\n---------------------------------------------------------------------------\n", "   x4   ".ljust(10, " "), end="")
+        print(f"| {i[2]}  ", end="")
+    print("\n-------------------------------------------------------------------------------------------\n", "   x4   ".ljust(10, " "), end="")
     for i in table:
-        print(f"| {i[3]} ", end="")
-    print("\n---------------------------------------------------------------------------\n", "   y1   ".ljust(10, " "), end="")
+        print(f"| {i[3]}  ", end="")
+    print("\n-------------------------------------------------------------------------------------------\n", "   y1   ".ljust(10, " "), end="")
     for i in table:
-        print(f"| {i[4]} ", end="")
-    print("\n---------------------------------------------------------------------------\n", "   y2   ".ljust(10, " "), end="")
+        print(f"| {i[4]}  ", end="")
+    print("\n-------------------------------------------------------------------------------------------\n", "   y2   ".ljust(10, " "), end="")
     for i in table:
-        print(f"| {i[5]} ", end="")
-    print("\n---------------------------------------------------------------------------\n", "   y3   ".ljust(10, " "), end="")
+        print(f"| {i[5]}  ", end="")
+    print("\n-------------------------------------------------------------------------------------------\n", "   y3   ".ljust(10, " "), end="")
     for i in table:
-        print(f"| {i[6]} ", end="")
-    print("\n---------------------------------------------------------------------------\n", "   y4   ".ljust(10, " "), end="")
+        print(f"| {i[6]}  ", end="")
+    print("\n-------------------------------------------------------------------------------------------\n", "   y4   ".ljust(10, " "), end="")
     for i in table:
-        print(f"| {i[7]} ", end="")
-    print("\n---------------------------------------------------------------------------\n")
+        print(f"| {i[7]}  ", end="")
+    print("\n-------------------------------------------------------------------------------------------\n")
 
 
 def to_SDNF(index, table, key=None):
@@ -215,7 +203,7 @@ def minimization(SDNF_4_variables):
                 j -= 1
             j += 1
         i += 1
-    MDNF = calculation_tabular_method(SDNF_full, SDNF_4_variables, "sdnf")
+    MDNF = calculation_tabular_method(SDNF_full, SDNF_4_variables)
     MDNF.sort(key=lambda x: len(x))
     print_dnf(MDNF)
 
@@ -227,36 +215,48 @@ def print_dnf(dnf):
 
 
 def main():
-    table = summator()
-    print_table(table)
-    SDNF_out1 =  to_SDNF(3, table)
-    print("SDNF form (f):", SDNF_out1)
-    SDNF_out1 = [i.split("*") for i in SDNF_out1.split(" + ")]
-    DNF_out1 = gluing(SDNF_out1, 2) if len(gluing(SDNF_out1, 2)) > 0 else SDNF_out1
-    MDNF_out1 = calculation_tabular_method(DNF_out1, SDNF_out1, "sdnf")
-    print_dnf(MDNF_out1)
-
-    SDNF_out2 =  to_SDNF(4, table)
-    print("SDNF form (f+1):", SDNF_out2)
-    SDNF_out2 = [i.split("*") for i in SDNF_out2.split(" + ")]
-    DNF_out2 = gluing(SDNF_out2, 2) if len(gluing(SDNF_out2, 2)) > 0 else SDNF_out1
-    MDNF_out2 = calculation_tabular_method(DNF_out2, SDNF_out2, "sdnf")
-    print_dnf(MDNF_out2)
-    print("\nn = 5")
-    table = preobrazovatel()
-    print_new_table(table)
-    SDNF_y1 = to_SDNF(4, table, 4)
-    print("SDNF form (y1):", SDNF_y1)
-    minimization(SDNF_y1)    
-    SDNF_y2 = to_SDNF(5, table, 4)
-    print("SDNF form (y2):", SDNF_y2)
-    minimization(SDNF_y2)
-    SDNF_y3 = to_SDNF(6, table, 4)
-    print("SDNF form (y3):", SDNF_y3)
-    minimization(SDNF_y3)
-    SDNF_y4 = to_SDNF(7, table, 4)
-    print("SDNF form (y4):", SDNF_y4)
-    minimization(SDNF_y4)
+    print("Lab 4")
+    while 1:
+        print("First task - press 1")
+        print("Second task - press 2")
+        print("To exit - press 0")
+        choose = input("Enter choise: ")
+        match choose:
+            case "1":
+                table = summator()
+                print_table(table)
+                SDNF_out1 =  to_SDNF(3, table)
+                print("SDNF form (f):", SDNF_out1)
+                SDNF_out1 = [i.split("*") for i in SDNF_out1.split(" + ")]
+                DNF_out1 = gluing(SDNF_out1, 2) if len(gluing(SDNF_out1, 2)) > 0 else SDNF_out1
+                MDNF_out1 = calculation_tabular_method(DNF_out1, SDNF_out1)
+                print_dnf(MDNF_out1)
+                SDNF_out2 =  to_SDNF(4, table)
+                print("SDNF form (f+1):", SDNF_out2)
+                SDNF_out2 = [i.split("*") for i in SDNF_out2.split(" + ")]
+                DNF_out2 = gluing(SDNF_out2, 2) if len(gluing(SDNF_out2, 2)) > 0 else SDNF_out1
+                MDNF_out2 = calculation_tabular_method(DNF_out2, SDNF_out2)
+                print_dnf(MDNF_out2)
+            case "2":
+                print("\nn = 5")
+                table = preobrazovatel()
+                print_new_table(table)
+                SDNF_y1 = to_SDNF(4, table, 4)
+                print("SDNF form (y1):", SDNF_y1)
+                minimization(SDNF_y1)
+                SDNF_y2 = to_SDNF(5, table, 4)
+                print("SDNF form (y2):", SDNF_y2)
+                minimization(SDNF_y2)
+                SDNF_y3 = to_SDNF(6, table, 4)
+                print("SDNF form (y3):", SDNF_y3)
+                minimization(SDNF_y3)
+                SDNF_y4 = to_SDNF(7, table, 4)
+                print("SDNF form (y4):", SDNF_y4)
+                minimization(SDNF_y4)
+            case "0":
+                break
+            case _:
+                print("Invalid input")
 
 
 if __name__ == "__main__":
